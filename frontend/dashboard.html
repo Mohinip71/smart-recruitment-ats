@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Candidate Dashboard - Smart ATS</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- Top Navigation Bar -->
+  <header class="navbar">
+    <div class="logo">Smart ATS</div>
+    <div class="nav-links">
+      <a href="dashboard.html" class="active">Dashboard</a>
+      <a href="#">My Applications</a>
+      <a href="login.html" class="logout-btn">Logout</a>
+    </div>
+  </header>
+
+  <!-- Main Dashboard Container -->
+  <main class="dashboard-container">
+    
+    <!-- Welcome & Search Header -->
+    <section class="welcome-banner">
+      <div>
+        <h1>Welcome Back, Candidate!</h1>
+        <p>Explore top open positions and track your active job applications.</p>
+      </div>
+      <div class="search-box">
+        <input type="text" placeholder="Search by job title, skill, or keyword...">
+        <button class="btn search-btn">Search</button>
+      </div>
+    </section>
+
+    <!-- Key Metrics Cards -->
+    <section class="metrics-grid">
+      <div class="metric-card">
+        <h3>Active Applications</h3>
+        <span class="metric-number">4</span>
+      </div>
+      <div class="metric-card">
+        <h3>Interviews Scheduled</h3>
+        <span class="metric-number">1</span>
+      </div>
+      <div class="metric-card">
+        <h3>Saved Jobs</h3>
+        <span class="metric-number">12</span>
+      </div>
+    </section>
+
+    <!-- Job Openings Section -->
+    <section class="jobs-section">
+      <h2>Featured Job Openings</h2>
+      
+      <div class="jobs-grid">
+        
+        <!-- Job Card 1 -->
+        <div class="job-card">
+          <div class="job-header">
+            <h3>Frontend Developer</h3>
+            <span class="job-type">Full-Time</span>
+          </div>
+          <p class="company-name">TechCorp Solutions • Hyderabad, India</p>
+          <p class="job-description">Looking for a React developer proficient in HTML, CSS, JavaScript, and responsive layout design.</p>
+          <div class="job-footer">
+            <span class="salary">₹6,00,000 - ₹9,00,000 / yr</span>
+            <button class="btn apply-btn">Apply Now</button>
+          </div>
+        </div>
+
+        <!-- Job Card 2 -->
+        <div class="job-card">
+          <div class="job-header">
+            <h3>Junior Operations Associate</h3>
+            <span class="job-type">Remote</span>
+          </div>
+          <p class="company-name">Semnexa Services • India</p>
+          <p class="job-description">Manage client operations, process data inputs, and support cross-functional business teams.</p>
+          <div class="job-footer">
+            <span class="salary">₹4,50,000 - ₹6,50,000 / yr</span>
+            <button class="btn apply-btn">Apply Now</button>
+          </div>
+        </div>
+
+        <!-- Job Card 3 -->
+        <div class="job-card">
+          <div class="job-header">
+            <h3>Java Software Engineer</h3>
+            <span class="job-type">Full-Time</span>
+          </div>
+          <p class="company-name">Enterprise Systems Inc. • Bengaluru, India</p>
+          <p class="job-description">Build scalable back-end services using Java, OOP principles, Express, and SQL database systems.</p>
+          <div class="job-footer">
+            <span class="salary">₹8,00,000 - ₹12,00,000 / yr</span>
+            <button class="btn apply-btn">Apply Now</button>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+  </main>
+
+</body>
+</html>
