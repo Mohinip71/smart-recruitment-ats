@@ -25,11 +25,25 @@
     <section class="welcome-banner">
       <div>
         <h1>Welcome Back, Candidate!</h1>
-        <p>Explore top open positions and track your active job applications.</p>
+        <p>Explore top open positions, filter by preference, and track your applications.</p>
       </div>
-      <div class="search-box">
-        <input type="text" placeholder="Search by job title, skill, or keyword...">
-        <button class="btn search-btn">Search</button>
+      
+      <!-- Multi-Filter Bar -->
+      <div class="filter-bar">
+        <input type="text" class="filter-input" placeholder="Search by job title or key skills...">
+        <select class="filter-select">
+          <option value="">All Job Types</option>
+          <option value="full-time">Full-Time</option>
+          <option value="remote">Remote</option>
+          <option value="hybrid">Hybrid</option>
+        </select>
+        <select class="filter-select">
+          <option value="">All Locations</option>
+          <option value="hyderabad">Hyderabad</option>
+          <option value="bengaluru">Bengaluru</option>
+          <option value="remote">Remote (India)</option>
+        </select>
+        <button class="btn search-btn">Search Jobs</button>
       </div>
     </section>
 
@@ -58,39 +72,54 @@
         <!-- Job Card 1 -->
         <div class="job-card">
           <div class="job-header">
-            <h3>Frontend Developer</h3>
-            <span class="job-type">Full-Time</span>
+            <div class="company-badge badge-blue">TC</div>
+            <span class="status-tag status-applied">Applied</span>
           </div>
+          <h3>Frontend Developer</h3>
           <p class="company-name">TechCorp Solutions • Hyderabad, India</p>
-          <p class="job-description">Looking for a React developer proficient in HTML, CSS, JavaScript, and responsive layout design.</p>
+          <p class="job-description">Build modern React components with clean HTML, CSS, JavaScript, and responsive dashboard layouts.</p>
+          <div class="tags-row">
+            <span class="job-tag">Full-Time</span>
+            <span class="job-tag">0-2 Yrs Exp</span>
+          </div>
           <div class="job-footer">
             <span class="salary">₹6,00,000 - ₹9,00,000 / yr</span>
-            <button class="btn apply-btn">Apply Now</button>
+            <button class="btn apply-btn btn-secondary">View Details</button>
           </div>
         </div>
 
         <!-- Job Card 2 -->
         <div class="job-card">
           <div class="job-header">
-            <h3>Junior Operations Associate</h3>
-            <span class="job-type">Remote</span>
+            <div class="company-badge badge-purple">SX</div>
+            <span class="status-tag status-review">In Review</span>
           </div>
-          <p class="company-name">Semnexa Services • India</p>
-          <p class="job-description">Manage client operations, process data inputs, and support cross-functional business teams.</p>
+          <h3>Junior Operations Associate</h3>
+          <p class="company-name">Semnexa Services • Remote (India)</p>
+          <p class="job-description">Manage client operations, process data workflows, and assist cross-functional enterprise teams.</p>
+          <div class="tags-row">
+            <span class="job-tag">Remote</span>
+            <span class="job-tag">Entry Level</span>
+          </div>
           <div class="job-footer">
             <span class="salary">₹4,50,000 - ₹6,50,000 / yr</span>
-            <button class="btn apply-btn">Apply Now</button>
+            <button class="btn apply-btn btn-secondary">View Details</button>
           </div>
         </div>
 
         <!-- Job Card 3 -->
         <div class="job-card">
           <div class="job-header">
-            <h3>Java Software Engineer</h3>
-            <span class="job-type">Full-Time</span>
+            <div class="company-badge badge-green">ES</div>
+            <span class="status-tag status-open">Open</span>
           </div>
+          <h3>Java Software Engineer</h3>
           <p class="company-name">Enterprise Systems Inc. • Bengaluru, India</p>
-          <p class="job-description">Build scalable back-end services using Java, OOP principles, Express, and SQL database systems.</p>
+          <p class="job-description">Develop microservices using Java, OOP principles, REST APIs, and relational SQL database structures.</p>
+          <div class="tags-row">
+            <span class="job-tag">Full-Time</span>
+            <span class="job-tag">1-3 Yrs Exp</span>
+          </div>
           <div class="job-footer">
             <span class="salary">₹8,00,000 - ₹12,00,000 / yr</span>
             <button class="btn apply-btn">Apply Now</button>
