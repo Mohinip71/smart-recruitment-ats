@@ -130,6 +130,39 @@
     </section>
 
   </main>
+  <!-- Application Modal Popup -->
+  <div id="applyModal" class="modal">
+    <div class="modal-content">
+      <span class="close-btn">&times;</span>
+      <h2>Apply for Job</h2>
+      <p id="modalJobTitle" class="subtitle">Position Details</p>
+      
+      <form id="applicationForm">
+        <div class="form-group">
+          <label for="applicantName">Full Name</label>
+          <input type="text" id="applicantName" placeholder="Enter your full name" required>
+        </div>
+
+        <div class="form-group">
+          <label for="applicantEmail">Email Address</label>
+          <input type="email" id="applicantEmail" placeholder="Enter your email" required>
+        </div>
+
+        <div class="form-group">
+          <label for="applicantPhone">Phone Number</label>
+          <input type="text" id="applicantPhone" placeholder="Enter your phone number" required>
+        </div>
+
+        <div class="form-group">
+          <label for="resumeUpload">Upload Resume (PDF/DOCX)</label>
+          <input type="file" id="resumeUpload" accept=".pdf,.doc,.docx" required>
+        </div>
+
+        <button type="submit" class="btn">Submit Application</button>
+      </form>
+    </div>
+  </div>
+
 <!-- Link JavaScript File -->
   <script src="script.js"></script>
 </body>
