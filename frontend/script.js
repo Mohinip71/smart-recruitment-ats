@@ -1,4 +1,4 @@
-/* --- Day 5: Candidate Dashboard & Application Modal Interactivity --- */
+/* --- Smart Recruitment & ATS Platform - Main Script --- */
 
 document.addEventListener("DOMContentLoaded", () => {
   const searchInput = document.querySelector(".filter-input");
@@ -28,23 +28,22 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
-  // 2. Open Modal when clicking "Apply Now" or "View Details"
+  // 2. Open Modal when clicking "Apply Now"
   applyButtons.forEach(button => {
     button.addEventListener("click", (e) => {
       const card = e.target.closest(".job-card");
-      const jobTitle = card.querySelector("h3").textContent;
-      const company = card.querySelector(".company-name").textContent;
+      if (card && modalJobTitle && modal) {
+        const jobTitle = card.querySelector("h3").textContent;
+        const company = card.querySelector(".company-name").textContent;
 
-      // Set modal title text
-      modalJobTitle.textContent = `${jobTitle} at ${company}`;
-      
-      // Show modal
-      modal.style.display = "flex";
+        modalJobTitle.textContent = `${jobTitle} at ${company}`;
+        modal.style.display = "flex";
+      }
     });
   });
 
   // 3. Close Modal when clicking the 'X'
-  if (closeBtn) {
+  if (closeBtn && modal) {
     closeBtn.addEventListener("click", () => {
       modal.style.display = "none";
     });
@@ -52,90 +51,50 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // 4. Close Modal when clicking outside the modal box
   window.addEventListener("click", (e) => {
-    if (e.target === modal) {
+    if (modal && e.target === modal) {
       modal.style.display = "none";
     }
   });
 
-  // 5. Handle Application Form Submission
+  // 5. Handle Application Form Submission & Save to localStorage
   if (applicationForm) {
     applicationForm.addEventListener("submit", (e) => {
       e.preventDefault();
-      alert("Success! Your application has been submitted successfully to the ATS.");
-      modal.style.display = "none";
+
+      const candidateName = document.getElementById("candidateName")?.value || "Kale Prasanna";
+      const candidateEmail = document.getElementById("candidateEmail")?.value || "prasannakale882@gmail.com";
+      const currentDate = new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+      const jobTitle = modalJobTitle?.innerText || "Software Engineer";
+
+      const newApplication = {
+        title: jobTitle,
+        company: "TechCorp Solutions",
+        date: currentDate,
+        status: "In Review",
+        applicantName: candidateName,
+        email: candidateEmail
+      };
+
+      let existingApps = JSON.parse(localStorage.getItem("ats_applications")) || [];
+      existingApps.push(newApplication);
+      localStorage.setItem("ats_applications", JSON.stringify(existingApps));
+
+      alert("Success! Your application has been submitted and saved to localStorage.");
+      
+      if (modal) modal.style.display = "none";
       applicationForm.reset();
     });
+  }
 
-    // 6. Handle Recruiter Job Posting Form Submission
+  // 6. Handle Recruiter Job Posting Form Submission
   const createJobForm = document.getElementById("createJobForm");
   if (createJobForm) {
     createJobForm.addEventListener("submit", (e) => {
       e.preventDefault();
-      alert("New Job Posting Published Successfully!");
-      createJobForm.reset();
-    });
-  }
-  }
-  // 7. Handle View Details Modal on My Applications Page
-  const detailsModal = document.getElementById("detailsModal");
-  const closeDetailsModal = document.getElementById("closeDetailsModal");
-  const closeModalBtn = document.getElementById("closeModalBtn");
-  const viewDetailsBtns = document.querySelectorAll(".table-section .btn");
-
-  if (detailsModal && viewDetailsBtns.length > 0) {
-    viewDetailsBtns.forEach((btn) => {
-      btn.addEventListener("click", (e) => {
-        const row = e.target.closest("tr");
-        if (row) {
-          const jobTitle = row.cells[0].innerText;
-          const company = row.cells[1].innerText;
-          const date = row.cells[2].innerText;
-          const status = row.cells[3].innerText;
-
-          document.getElementById("modalJobTitleDetail").innerText = jobTitle;
-          document.getElementById("modalCompanyDetail").innerText = company;
-          document.getElementById("modalDateDetail").innerText = date;
-          document.getElementById("modalStatusDetail").innerText = status;
-
-          detailsModal.style.display = "flex";
-        }
-      });
-    });
-
-    if (closeDetailsModal) {
-      closeDetailsModal.addEventListener("click", () => {
-        detailsModal.style.display = "none";
-      });
-    }
-
-    if (closeModalBtn) {
-      closeModalBtn.addEventListener("click", () => {
-        detailsModal.style.display = "none";
-      });
-    }
-
-    window.addEventListener("click", (e) => {
-      if (e.target === detailsModal) {
-        detailsModal.style.display = "none";
-      }
-    });
-
-    window.addEventListener("click", (e) => {
-    if (e.target === detailsModal) {
-      detailsModal.style.display = "none";
-    }
-  });
-
-  // --- PASTE NEW LOCALSTORAGE & RECRUITER CODE HERE ---
-
-  const createJobForm = document.getElementById("createJobForm");
-  if (createJobForm) {
-    createJobForm.addEventListener("submit", (e) => {
-      e.preventDefault();
-      const title = document.getElementById("jobTitle").value;
-      const company = document.getElementById("companyName").value || "TechCorp Solutions";
-      const location = document.getElementById("jobLocation").value || "Remote";
-      const type = document.getElementById("jobType").value || "Full-time";
+      const title = document.getElementById("jobTitle")?.value || "Software Engineer";
+      const company = document.getElementById("companyName")?.value || "TechCorp Solutions";
+      const location = document.getElementById("jobLocation")?.value || "Remote";
+      const type = document.getElementById("jobType")?.value || "Full-time";
 
       const newJob = { id: Date.now(), title, company, location, type };
       
@@ -143,11 +102,12 @@ document.addEventListener("DOMContentLoaded", () => {
       existingJobs.push(newJob);
       localStorage.setItem("ats_jobs", JSON.stringify(existingJobs));
 
-      alert("New Job Posting Published Successfully and synced to Candidate Dashboard!");
+      alert("New Job Posting Published Successfully!");
       createJobForm.reset();
     });
   }
 
+  // Render Custom Jobs on Dashboard from localStorage
   const jobContainer = document.querySelector(".job-grid");
   if (jobContainer) {
     const customJobs = JSON.parse(localStorage.getItem("ats_jobs")) || [];
@@ -167,18 +127,62 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
+  // 7. Render Dynamic Applications in Recruiter Table
+  const recruiterTableBody = document.querySelector("table tbody");
+  if (recruiterTableBody) {
+    const savedApps = JSON.parse(localStorage.getItem("ats_applications")) || [];
+    savedApps.forEach(app => {
+      const tr = document.createElement("tr");
+      tr.innerHTML = `
+        <td>${app.applicantName}</td>
+        <td>${app.title}</td>
+        <td>${app.email || "prasannakale882@gmail.com"}</td>
+        <td><span class="badge" style="background: #e6f4ea; color: #137333; padding: 4px 8px; border-radius: 4px;">${app.status}</span></td>
+        <td>
+          <button class="btn view-resume-btn" style="background: #4e73df; color: #fff; padding: 6px 12px; border: none; border-radius: 4px; cursor: pointer;">View Resume</button>
+        </td>
+      `;
+      recruiterTableBody.appendChild(tr);
+    });
+  }
+
+  // 8. Universal Resume Modal Handler for ALL rows (Static & Dynamic)
   const resumeModal = document.getElementById("resumeModal");
   const closeResumeModal = document.getElementById("closeResumeModal");
   const closeResumeBtn = document.getElementById("closeResumeBtn");
-  const viewResumeBtns = document.querySelectorAll(".view-resume-btn");
 
-  if (resumeModal && viewResumeBtns.length > 0) {
-    viewResumeBtns.forEach(btn => {
-      btn.addEventListener("click", () => {
-        resumeModal.style.display = "flex";
-      });
-    });
+  document.addEventListener("click", (e) => {
+    const btn = e.target.closest(".view-resume-btn");
+    if (btn) {
+      const row = btn.closest("tr");
+      if (row) {
+        const applicantName = row.cells[0]?.innerText.trim() || "Candidate Name";
+        const jobTitle = row.cells[1]?.innerText.trim() || "Software Engineer";
+        const applicantEmail = row.cells[2]?.innerText.trim() || "candidate@email.com";
 
+        if (resumeModal) {
+          const nameElement = resumeModal.querySelector("h3") || resumeModal.querySelector(".candidate-name");
+          if (nameElement) nameElement.innerText = applicantName;
+
+          const paragraphs = resumeModal.querySelectorAll("p");
+          paragraphs.forEach(p => {
+            const text = p.innerText.toLowerCase();
+            if (text.includes("email") || text.includes("@")) {
+              p.innerHTML = `<strong>Email:</strong> ${applicantEmail}`;
+            }
+            if (text.includes("position") || text.includes("software") || text.includes("developer")) {
+              p.innerHTML = `<strong>Applied Position:</strong> ${jobTitle}`;
+            }
+          });
+
+          resumeModal.style.display = "flex";
+        }
+      }
+    }
+  });
+
+  // Close Resume Modal Handlers
+  if (resumeModal) {
     if (closeResumeModal) closeResumeModal.addEventListener("click", () => resumeModal.style.display = "none");
     if (closeResumeBtn) closeResumeBtn.addEventListener("click", () => resumeModal.style.display = "none");
     window.addEventListener("click", (e) => {
@@ -186,5 +190,4 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
-} // <--- Closes the DOMContentLoaded function
 });
