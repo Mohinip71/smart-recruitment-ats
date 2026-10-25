@@ -119,5 +119,72 @@ document.addEventListener("DOMContentLoaded", () => {
         detailsModal.style.display = "none";
       }
     });
+
+    window.addEventListener("click", (e) => {
+    if (e.target === detailsModal) {
+      detailsModal.style.display = "none";
+    }
+  });
+
+  // --- PASTE NEW LOCALSTORAGE & RECRUITER CODE HERE ---
+
+  const createJobForm = document.getElementById("createJobForm");
+  if (createJobForm) {
+    createJobForm.addEventListener("submit", (e) => {
+      e.preventDefault();
+      const title = document.getElementById("jobTitle").value;
+      const company = document.getElementById("companyName").value || "TechCorp Solutions";
+      const location = document.getElementById("jobLocation").value || "Remote";
+      const type = document.getElementById("jobType").value || "Full-time";
+
+      const newJob = { id: Date.now(), title, company, location, type };
+      
+      let existingJobs = JSON.parse(localStorage.getItem("ats_jobs")) || [];
+      existingJobs.push(newJob);
+      localStorage.setItem("ats_jobs", JSON.stringify(existingJobs));
+
+      alert("New Job Posting Published Successfully and synced to Candidate Dashboard!");
+      createJobForm.reset();
+    });
   }
+
+  const jobContainer = document.querySelector(".job-grid");
+  if (jobContainer) {
+    const customJobs = JSON.parse(localStorage.getItem("ats_jobs")) || [];
+    customJobs.forEach(job => {
+      const jobCard = document.createElement("div");
+      jobCard.className = "job-card";
+      jobCard.style.cssText = "background: #fff; padding: 20px; border-radius: 10px; box-shadow: 0 4px 10px rgba(0,0,0,0.05); display: flex; flex-direction: column; justify-content: space-between;";
+      jobCard.innerHTML = `
+        <div>
+          <h3 style="color: #2d3748; margin-bottom: 8px;">${job.title}</h3>
+          <p style="color: #4e73df; font-weight: 600; margin-bottom: 6px;">${job.company}</p>
+          <p style="color: #707ebe; font-size: 14px; margin-bottom: 12px;">📍 ${job.location} | 💼 ${job.type}</p>
+        </div>
+        <button class="btn apply-btn" style="background: #4e73df; color: #fff; padding: 8px 16px; border: none; border-radius: 6px; cursor: pointer;">Apply Now</button>
+      `;
+      jobContainer.appendChild(jobCard);
+    });
+  }
+
+  const resumeModal = document.getElementById("resumeModal");
+  const closeResumeModal = document.getElementById("closeResumeModal");
+  const closeResumeBtn = document.getElementById("closeResumeBtn");
+  const viewResumeBtns = document.querySelectorAll(".view-resume-btn");
+
+  if (resumeModal && viewResumeBtns.length > 0) {
+    viewResumeBtns.forEach(btn => {
+      btn.addEventListener("click", () => {
+        resumeModal.style.display = "flex";
+      });
+    });
+
+    if (closeResumeModal) closeResumeModal.addEventListener("click", () => resumeModal.style.display = "none");
+    if (closeResumeBtn) closeResumeBtn.addEventListener("click", () => resumeModal.style.display = "none");
+    window.addEventListener("click", (e) => {
+      if (e.target === resumeModal) resumeModal.style.display = "none";
+    });
+  }
+
+} // <--- Closes the DOMContentLoaded function
 });
