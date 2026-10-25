@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Recruiter Dashboard - Smart ATS</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- Navigation Bar -->
+  <nav class="navbar">
+    <div class="nav-brand">
+      <h2>Smart ATS <span class="badge">Recruiter</span></h2>
+    </div>
+    <div class="nav-user">
+      <span>Welcome, HR Manager</span>
+      <a href="index.html" class="logout-btn">Logout</a>
+    </div>
+  </nav>
+
+  <!-- Main Content Container -->
+  <main class="dashboard-container">
+    
+    <!-- Header Section -->
+    <header class="dashboard-header">
+      <h1>Recruiter Portal</h1>
+      <p>Manage posted jobs, track candidate applications, and publish new openings.</p>
+    </header>
+
+    <!-- Metrics Cards -->
+    <section class="metrics-grid">
+      <div class="metric-card">
+        <h3>Active Job Postings</h3>
+        <p class="metric-number">12</p>
+      </div>
+      <div class="metric-card">
+        <h3>Total Applications</h3>
+        <p class="metric-number">148</p>
+      </div>
+      <div class="metric-card">
+        <h3>Shortlisted Candidates</h3>
+        <p class="metric-number">24</p>
+      </div>
+    </section>
+
+    <!-- Create Job Posting Section -->
+    <section class="job-creation-section" style="background: #ffffff; padding: 24px; border-radius: 12px; margin-bottom: 30px; box-shadow: 0 4px 12px rgba(0,0,0,0.05);">
+      <h2>Post a New Job</h2>
+      <form id="createJobForm" style="margin-top: 15px;">
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
+          <div class="form-group">
+            <label for="jobTitle">Job Title</label>
+            <input type="text" id="jobTitle" placeholder="e.g. Senior Java Developer" required>
+          </div>
+          <div class="form-group">
+            <label for="companyName">Company Name</label>
+            <input type="text" id="companyName" placeholder="e.g. TechCorp Solutions" required>
+          </div>
+        </div>
+
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
+          <div class="form-group">
+            <label for="jobLocation">Location</label>
+            <input type="text" id="jobLocation" placeholder="e.g. Hyderabad, India (Remote)" required>
+          </div>
+          <div class="form-group">
+            <label for="jobType">Job Type</label>
+            <input type="text" id="jobType" placeholder="e.g. Full-Time / Part-Time" required>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="jobDescription">Job Description</label>
+          <textarea id="jobDescription" rows="3" placeholder="Enter key responsibilities and qualifications..." style="width: 100%; padding: 10px; border: 1px solid #e0e5f2; border-radius: 8px; font-family: inherit;" required></textarea>
+        </div>
+
+        <button type="submit" class="btn" style="width: 200px;">Publish Job Posting</button>
+      </form>
+    </section>
+
+    <!-- Candidate Applications Tracking Table -->
+    <section class="table-section" style="background: #ffffff; padding: 24px; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.05);">
+      <h2>Recent Candidate Submissions</h2>
+      <table style="width: 100%; border-collapse: collapse; margin-top: 15px; text-align: left;">
+        <thead>
+          <tr style="border-bottom: 2px solid #e0e5f2; color: #707ebe;">
+            <th style="padding: 12px;">Candidate Name</th>
+            <th style="padding: 12px;">Applied Position</th>
+            <th style="padding: 12px;">Email</th>
+            <th style="padding: 12px;">Status</th>
+            <th style="padding: 12px;">Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr style="border-bottom: 1px solid #e0e5f2;">
+            <td style="padding: 12px; font-weight: 600;">Kale Prasanna</td>
+            <td style="padding: 12px;">Java Software Engineer</td>
+            <td style="padding: 12px;">prasannakale882@gmail.com</td>
+            <td style="padding: 12px;"><span style="background: #e6f4ea; color: #137333; padding: 4px 8px; border-radius: 4px; font-size: 12px; font-weight: 600;">In Review</span></td>
+            <td style="padding: 12px;"><button class="btn" style="padding: 6px 12px; font-size: 12px;">View Resume</button></td>
+          </tr>
+          <tr style="border-bottom: 1px solid #e0e5f2;">
+            <td style="padding: 12px; font-weight: 600;">Rahul Sharma</td>
+            <td style="padding: 12px;">Frontend Developer</td>
+            <td style="padding: 12px;">rahul.s@example.com</td>
+            <td style="padding: 12px;"><span style="background: #fef7e0; color: #b06000; padding: 4px 8px; border-radius: 4px; font-size: 12px; font-weight: 600;">Pending</span></td>
+            <td style="padding: 12px;"><button class="btn" style="padding: 6px 12px; font-size: 12px;">View Resume</button></td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+
+  </main>
+
+  <!-- Link JavaScript File -->
+  <script src="script.js"></script>
+</body>
+</html>

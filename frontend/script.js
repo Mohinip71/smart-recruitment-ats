@@ -65,5 +65,15 @@ document.addEventListener("DOMContentLoaded", () => {
       modal.style.display = "none";
       applicationForm.reset();
     });
+
+    // 6. Handle Recruiter Job Posting Form Submission
+  const createJobForm = document.getElementById("createJobForm");
+  if (createJobForm) {
+    createJobForm.addEventListener("submit", (e) => {
+      e.preventDefault();
+      alert("New Job Posting Published Successfully!");
+      createJobForm.reset();
+    });
+  }
   }
 });
