@@ -25,4 +25,81 @@ model User {
   role      UserRole @default(CANDIDATE)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+  jobs Job[]
+  applications Application[]
+  candidateProfile CandidateProfile?
+}
+
+model CandidateProfile {
+  id        String   @id @default(cuid())
+
+  phone     String?
+  location  String?
+  bio       String?
+  skills    String?
+  resumeUrl String?
+
+  userId    String   @unique
+  user      User     @relation(fields: [userId], references: [id])
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+enum JobStatus {
+  DRAFT
+  PUBLISHED
+  CLOSED
+  ARCHIVED
+}
+
+enum EmploymentType {
+  FULL_TIME
+  PART_TIME
+  INTERNSHIP
+  CONTRACT
+}
+
+model Job {
+  id             String         @id @default(cuid())
+  title          String
+  description    String
+  location       String?
+  employmentType EmploymentType
+  salaryMin      Int?
+  salaryMax      Int?
+  skills         String?
+  status         JobStatus      @default(DRAFT)
+
+  recruiterId    String
+  recruiter      User           @relation(fields: [recruiterId], references: [id])
+
+  applications   Application[]
+
+  createdAt      DateTime       @default(now())
+  updatedAt      DateTime       @updatedAt
+}
+
+enum ApplicationStatus {
+  APPLIED
+  SCREENING
+  SHORTLISTED
+  INTERVIEW
+  SELECTED
+  REJECTED
+}
+
+model Application {
+  id          String            @id @default(cuid())
+  candidateId String
+  jobId       String
+  status      ApplicationStatus @default(APPLIED)
+
+  createdAt   DateTime          @default(now())
+  updatedAt   DateTime          @updatedAt
+
+  candidate   User              @relation(fields: [candidateId], references: [id])
+  job         Job               @relation(fields: [jobId], references: [id])
+
+  @@unique([candidateId, jobId])
 }
