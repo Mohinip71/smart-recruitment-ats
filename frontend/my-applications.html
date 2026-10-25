@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>My Applications - Smart ATS</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- Navigation Bar -->
+  <nav class="navbar">
+    <div class="nav-brand">
+      <h2>Smart ATS</h2>
+    </div>
+    <div class="nav-links" style="display: flex; gap: 20px; align-items: center;">
+      <a href="dashboard.html" class="nav-link" style="color: #707ebe; text-decoration: none; font-weight: 600;">Find Jobs</a>
+      <a href="my-applications.html" class="nav-link active" style="color: #4e73df; text-decoration: none; font-weight: 700; border-bottom: 2px solid #4e73df; padding-bottom: 4px;">My Applications</a>
+    </div>
+    <div class="nav-user">
+      <span>Welcome, Candidate</span>
+      <a href="index.html" class="logout-btn">Logout</a>
+    </div>
+  </nav>
+
+  <!-- Main Content Container -->
+  <main class="dashboard-container">
+    
+    <!-- Header Section -->
+    <header class="dashboard-header">
+      <h1>My Submitted Applications</h1>
+      <p>Track the real-time status and progress of your job applications.</p>
+    </header>
+
+    <!-- Metrics Summary Cards -->
+    <section class="metrics-grid">
+      <div class="metric-card">
+        <h3>Total Applied</h3>
+        <p class="metric-number">3</p>
+      </div>
+      <div class="metric-card">
+        <h3>In Review</h3>
+        <p class="metric-number">2</p>
+      </div>
+      <div class="metric-card">
+        <h3>Shortlisted</h3>
+        <p class="metric-number">1</p>
+      </div>
+    </section>
+
+    <!-- Applications Table -->
+    <section class="table-section" style="background: #ffffff; padding: 24px; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.05); margin-top: 20px;">
+      <h2>Application History</h2>
+      <table style="width: 100%; border-collapse: collapse; margin-top: 15px; text-align: left;">
+        <thead>
+          <tr style="border-bottom: 2px solid #e0e5f2; color: #707ebe;">
+            <th style="padding: 12px;">Job Title</th>
+            <th style="padding: 12px;">Company</th>
+            <th style="padding: 12px;">Applied Date</th>
+            <th style="padding: 12px;">Status</th>
+            <th style="padding: 12px;">Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr style="border-bottom: 1px solid #e0e5f2;">
+            <td style="padding: 12px; font-weight: 600;">Senior Java Developer</td>
+            <td style="padding: 12px;">TechCorp Solutions</td>
+            <td style="padding: 12px;">Oct 24, 2026</td>
+            <td style="padding: 12px;"><span style="background: #e6f4ea; color: #137333; padding: 4px 8px; border-radius: 4px; font-size: 12px; font-weight: 600;">In Review</span></td>
+            <td style="padding: 12px;"><button class="btn" style="padding: 6px 12px; font-size: 12px; background-color: #6c757d;">View Details</button></td>
+          </tr>
+          <tr style="border-bottom: 1px solid #e0e5f2;">
+            <td style="padding: 12px; font-weight: 600;">Frontend Web Developer</td>
+            <td style="padding: 12px;">InnovateX Systems</td>
+            <td style="padding: 12px;">Oct 22, 2026</td>
+            <td style="padding: 12px;"><span style="background: #e8f0fe; color: #1a73e8; padding: 4px 8px; border-radius: 4px; font-size: 12px; font-weight: 600;">Shortlisted</span></td>
+            <td style="padding: 12px;"><button class="btn" style="padding: 6px 12px; font-size: 12px; background-color: #4e73df;">View Details</button></td>
+          </tr>
+          <tr style="border-bottom: 1px solid #e0e5f2;">
+            <td style="padding: 12px; font-weight: 600;">Junior Operations Associate</td>
+            <td style="padding: 12px;">GlobalLogistics Co.</td>
+            <td style="padding: 12px;">Oct 18, 2026</td>
+            <td style="padding: 12px;"><span style="background: #fef7e0; color: #b06000; padding: 4px 8px; border-radius: 4px; font-size: 12px; font-weight: 600;">Under Review</span></td>
+            <td style="padding: 12px;"><button class="btn" style="padding: 6px 12px; font-size: 12px; background-color: #6c757d;">View Details</button></td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+
+  </main>
+
+  <script src="script.js"></script>
+</body>
+</html>

@@ -9,13 +9,19 @@
 <body>
 
   <!-- Top Navigation Bar -->
-  <header class="navbar">
-    <div class="logo">Smart ATS</div>
-    <div class="nav-links">
-      <a href="dashboard.html" class="active">Dashboard</a>
-      <a href="#">My Applications</a>
-      <a href="login.html" class="logout-btn">Logout</a>
+ <nav class="navbar">
+    <div class="nav-brand">
+      <h2>Smart ATS</h2>
     </div>
+    <div class="nav-links" style="display: flex; gap: 20px; align-items: center;">
+      <a href="dashboard.html" class="nav-link active" style="color: #4e73df; text-decoration: none; font-weight: 700; border-bottom: 2px solid #4e73df; padding-bottom: 4px;">Find Jobs</a>
+      <a href="my-applications.html" class="nav-link" style="color: #707ebe; text-decoration: none; font-weight: 600;">My Applications</a>
+    </div>
+    <div class="nav-user">
+      <span>Welcome, Candidate</span>
+      <a href="index.html" class="logout-btn">Logout</a>
+    </div>
+  </nav>
   </header>
 
   <!-- Main Dashboard Container -->
