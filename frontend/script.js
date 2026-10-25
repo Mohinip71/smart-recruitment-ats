@@ -76,4 +76,48 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
   }
+  // 7. Handle View Details Modal on My Applications Page
+  const detailsModal = document.getElementById("detailsModal");
+  const closeDetailsModal = document.getElementById("closeDetailsModal");
+  const closeModalBtn = document.getElementById("closeModalBtn");
+  const viewDetailsBtns = document.querySelectorAll(".table-section .btn");
+
+  if (detailsModal && viewDetailsBtns.length > 0) {
+    viewDetailsBtns.forEach((btn) => {
+      btn.addEventListener("click", (e) => {
+        const row = e.target.closest("tr");
+        if (row) {
+          const jobTitle = row.cells[0].innerText;
+          const company = row.cells[1].innerText;
+          const date = row.cells[2].innerText;
+          const status = row.cells[3].innerText;
+
+          document.getElementById("modalJobTitleDetail").innerText = jobTitle;
+          document.getElementById("modalCompanyDetail").innerText = company;
+          document.getElementById("modalDateDetail").innerText = date;
+          document.getElementById("modalStatusDetail").innerText = status;
+
+          detailsModal.style.display = "flex";
+        }
+      });
+    });
+
+    if (closeDetailsModal) {
+      closeDetailsModal.addEventListener("click", () => {
+        detailsModal.style.display = "none";
+      });
+    }
+
+    if (closeModalBtn) {
+      closeModalBtn.addEventListener("click", () => {
+        detailsModal.style.display = "none";
+      });
+    }
+
+    window.addEventListener("click", (e) => {
+      if (e.target === detailsModal) {
+        detailsModal.style.display = "none";
+      }
+    });
+  }
 });
