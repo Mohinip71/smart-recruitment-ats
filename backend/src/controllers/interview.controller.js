@@ -90,3 +90,41 @@ export const createInterview = async (req, res) => {
         });
     }
 };
+
+export const getMyInterviews = async (req, res) => {
+    try {
+        const interviews = await prisma.interview.findMany({
+            where: {
+                application: {
+                    candidateId: req.user.id
+                }
+            },
+            include: {
+                application: {
+                    include: {
+                        job: {
+                            select: {
+                                id: true,
+                                title: true,
+                                location: true
+                            }
+                        }
+                    }
+                }
+            },
+            orderBy: {
+                scheduledAt: "asc"
+            }
+        });
+
+        res.status(200).json({
+            interviews
+        });
+    } catch (error) {
+        console.error("Get my interviews error:", error);
+
+        res.status(500).json({
+            message: "Something went wrong"
+        });
+    }
+};

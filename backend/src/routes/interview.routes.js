@@ -1,6 +1,6 @@
 import express from "express";
 
-import { createInterview } from "../controllers/interview.controller.js";
+import { createInterview,getMyInterviews} from "../controllers/interview.controller.js";
 
 import { authenticate } from "../middleware/auth.middleware.js";
 import { authorize } from "../middleware/role.middleware.js";
@@ -12,6 +12,12 @@ router.post(
     authenticate,
     authorize("RECRUITER", "ADMIN"),
     createInterview
+);
+router.get(
+    "/my",
+    authenticate,
+    authorize("CANDIDATE"),
+    getMyInterviews
 );
 
 export default router;
