@@ -128,3 +128,163 @@ export const getMyInterviews = async (req, res) => {
         });
     }
 };
+
+export const getInterviewsByJob = async (req, res) => {
+    try {
+        const { jobId } = req.params;
+
+        // Check if job exists
+        const job = await prisma.job.findUnique({
+            where: { id: jobId }
+        });
+
+        if (!job) {
+            return res.status(404).json({
+                message: "Job not found"
+            });
+        }
+
+        // Only job owner or admin can view interviews
+        if (
+            req.user.role !== "ADMIN" &&
+            job.recruiterId !== req.user.id
+        ) {
+            return res.status(403).json({
+                message: "You are not allowed to view interviews for this job"
+            });
+        }
+
+        const interviews = await prisma.interview.findMany({
+            where: {
+                application: {
+                    jobId: jobId
+                }
+            },
+            include: {
+                application: {
+                    include: {
+                        candidate: {
+                            select: {
+                                id: true,
+                                name: true,
+                                email: true
+                            }
+                        }
+                    }
+                }
+            },
+            orderBy: {
+                scheduledAt: "asc"
+            }
+        });
+
+        res.status(200).json({
+            job: {
+                id: job.id,
+                title: job.title
+            },
+            interviews
+        });
+
+    } catch (error) {
+        console.error("Get job interviews error:", error);
+
+        res.status(500).json({
+            message: "Something went wrong"
+        });
+    }
+};
+
+export const updateInterviewStatus = async (req, res) => {
+    try {
+        const { interviewId } = req.params;
+        const { status } = req.body;
+
+        // 1. Check status is provided
+        if (!status) {
+            return res.status(400).json({
+                message: "Interview status is required"
+            });
+        }
+
+        // 2. Find interview with application and job
+        const interview = await prisma.interview.findUnique({
+            where: {
+                id: interviewId
+            },
+            include: {
+                application: {
+                    include: {
+                        job: true
+                    }
+                }
+            }
+        });
+
+        if (!interview) {
+            return res.status(404).json({
+                message: "Interview not found"
+            });
+        }
+
+        // 3. Check recruiter ownership
+        if (
+            req.user.role !== "ADMIN" &&
+            interview.application.job.recruiterId !== req.user.id
+        ) {
+            return res.status(403).json({
+                message: "You are not allowed to update this interview"
+            });
+        }
+
+        // 4. Validate status value
+        const validStatuses = [
+            "SCHEDULED",
+            "COMPLETED",
+            "CANCELLED"
+        ];
+
+        if (!validStatuses.includes(status)) {
+            return res.status(400).json({
+                message: "Invalid interview status"
+            });
+        }
+
+        // 5. Validate state transition
+        const allowedTransitions = {
+            SCHEDULED: ["COMPLETED", "CANCELLED"],
+            COMPLETED: [],
+            CANCELLED: []
+        };
+
+        if (!allowedTransitions[interview.status].includes(status)) {
+            return res.status(400).json({
+                message:
+                    `Invalid status transition from ${interview.status} to ${status}`
+            });
+        }
+
+        // 6. Update interview
+        const updatedInterview = await prisma.interview.update({
+            where: {
+                id: interviewId
+            },
+            data: {
+                status
+            }
+        });
+
+        // 7. Send response
+        res.status(200).json({
+            message: "Interview status updated successfully",
+            interview: updatedInterview
+        });
+
+    } catch (error) {
+        console.error("Update interview status error:", error);
+
+        res.status(500).json({
+            message: "Something went wrong"
+        });
+    }
+};
