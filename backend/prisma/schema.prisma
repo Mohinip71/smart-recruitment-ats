@@ -102,6 +102,7 @@ model Application {
   job         Job               @relation(fields: [jobId], references: [id])
 
   interviews Interview[]
+  offers Offer[]
   @@unique([candidateId, jobId])
   
 }
@@ -135,4 +136,27 @@ model Interview {
 
   createdAt     DateTime        @default(now())
   updatedAt     DateTime        @updatedAt
+}
+
+enum OfferStatus {
+  PENDING
+  ACCEPTED
+  REJECTED
+  EXPIRED
+}
+
+model Offer {
+  id            String      @id @default(cuid())
+
+  applicationId String      @unique
+  salary        Int
+  joiningDate   DateTime
+  expiryDate    DateTime?
+  status        OfferStatus @default(PENDING)
+  notes         String?
+
+  application   Application @relation(fields: [applicationId], references: [id])
+
+  createdAt     DateTime    @default(now())
+  updatedAt     DateTime    @updatedAt
 }
