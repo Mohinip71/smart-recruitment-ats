@@ -1,0 +1,5 @@
+[33m8ab37a2[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mmain[m[33m, [m[1;31morigin/main[m[33m, [m[1;31morigin/HEAD[m[33m)[m Finalized Smart ATS platform: persistent localStorage, dynamic 5-column recruiter table, and universal resume modal data binding
+[33mf7599df[m Added localStorage job persistence and interactive recruiter resume modal
+[33m793d81d[m Completed View Details modal functionality for My Applications page
+[33m434c753[m Successfully added and tested candidate My Applications page and navigation routing
+[33m0348827[m Day 5: Added recruiter view page and job posting logic
