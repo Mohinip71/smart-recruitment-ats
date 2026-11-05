@@ -1,6 +1,10 @@
 import express from "express";
 
-import { createOffer,getMyOffers } from "../controllers/offer.controller.js";
+import {
+    createOffer,
+    getMyOffers,
+    updateOfferStatus
+} from "../controllers/offer.controller.js";
 
 import { authenticate } from "../middleware/auth.middleware.js";
 import { authorize } from "../middleware/role.middleware.js";
@@ -19,6 +23,13 @@ router.get(
     authenticate,
     authorize("CANDIDATE"),
     getMyOffers
+);
+
+router.patch(
+    "/:offerId/status",
+    authenticate,
+    authorize("CANDIDATE"),
+    updateOfferStatus
 );
 
 export default router;
