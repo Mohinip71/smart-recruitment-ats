@@ -1,12 +1,13 @@
-node_modules
 .env
-cookies.txt
+.env.*
+!.env.example
 
-/src/generated/prisma
-
-.agents/
-.claude/
-.windsurf/
-skills-lock.json
+node_modules/
+admin-cookies.txt
 candidate-cookies.txt
+candidate2-cookies.txt
+owner-cookies.txt
+cookies.txt
 recruiter-cookies.txt
+# Generated Prisma Client
+src/generated/
