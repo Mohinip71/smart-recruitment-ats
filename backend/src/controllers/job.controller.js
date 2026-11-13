@@ -12,9 +12,32 @@ export const createJob = async (req, res) => {
             skills
         } = req.body;
 
-        if (!title || !description || !employmentType) {
+        // Validate salary range
+        if (
+            salaryMin !== undefined &&
+            (!Number.isInteger(Number(salaryMin)) || Number(salaryMin) < 0)
+        ) {
             return res.status(400).json({
-                message: "Title, description and employment type are required"
+                message: "Minimum salary must be a non-negative integer"
+            });
+        }
+
+        if (
+            salaryMax !== undefined &&
+            (!Number.isInteger(Number(salaryMax)) || Number(salaryMax) < 0)
+        ) {
+            return res.status(400).json({
+                message: "Maximum salary must be a non-negative integer"
+            });
+        }
+
+        if (
+            salaryMin !== undefined &&
+            salaryMax !== undefined &&
+            Number(salaryMin) > Number(salaryMax)
+        ) {
+            return res.status(400).json({
+                message: "Minimum salary cannot exceed maximum salary"
             });
         }
 
@@ -107,7 +130,7 @@ export const updateJob = async (req, res) => {
             salaryMin,
             salaryMax,
             skills
-            
+
         } = req.body;
 
         const existingJob = await prisma.job.findUnique({
@@ -115,6 +138,53 @@ export const updateJob = async (req, res) => {
                 id: id
             }
         });
+
+        if (!existingJob) {
+            return res.status(404).json({
+                message: "Job not found"
+            });
+        }
+
+        // Validate salary range during job update
+        if (
+            salaryMin !== undefined &&
+            salaryMin !== null &&
+            (!Number.isInteger(Number(salaryMin)) || Number(salaryMin) < 0)
+        ) {
+            return res.status(400).json({
+                message: "Minimum salary must be a non-negative integer"
+            });
+        }
+
+        if (
+            salaryMax !== undefined &&
+            salaryMax !== null &&
+            (!Number.isInteger(Number(salaryMax)) || Number(salaryMax) < 0)
+        ) {
+            return res.status(400).json({
+                message: "Maximum salary must be a non-negative integer"
+            });
+        }
+
+        const finalSalaryMin = salaryMin !== undefined
+            ? salaryMin
+            : existingJob.salaryMin;
+
+        const finalSalaryMax = salaryMax !== undefined
+            ? salaryMax
+            : existingJob.salaryMax;
+
+        if (
+            finalSalaryMin !== null &&
+            finalSalaryMax !== null &&
+            finalSalaryMin !== undefined &&
+            finalSalaryMax !== undefined &&
+            Number(finalSalaryMin) > Number(finalSalaryMax)
+        ) {
+            return res.status(400).json({
+                message: "Minimum salary cannot exceed maximum salary"
+            });
+        }
 
         if (!existingJob) {
             return res.status(404).json({
@@ -140,8 +210,8 @@ export const updateJob = async (req, res) => {
                 description,
                 location,
                 employmentType,
-                salaryMin,
-                salaryMax,
+                salaryMin: salaryMin === undefined ? undefined : salaryMin === null ? null : Number(salaryMin),
+                salaryMax: salaryMax === undefined ? undefined : salaryMax === null ? null : Number(salaryMax),
                 skills,
             }
         });
@@ -193,12 +263,26 @@ export const publishJob = async (req, res) => {
             });
         }
 
-        const publishedJob = await prisma.job.update({
+        // Atomically publish only a DRAFT job.
+        const updateResult = await prisma.job.updateMany({
             where: {
-                id: id
+                id: id,
+                status: "DRAFT"
             },
             data: {
                 status: "PUBLISHED"
+            }
+        });
+
+        if (updateResult.count === 0) {
+            return res.status(409).json({
+                message: "Job was already updated by another request"
+            });
+        }
+
+        const publishedJob = await prisma.job.findUnique({
+            where: {
+                id: id
             }
         });
 
@@ -247,12 +331,26 @@ export const closeJob = async (req, res) => {
             });
         }
 
-        const closedJob = await prisma.job.update({
+        // Atomically close only a PUBLISHED job.
+        const updateResult = await prisma.job.updateMany({
             where: {
-                id: id
+                id: id,
+                status: "PUBLISHED"
             },
             data: {
                 status: "CLOSED"
+            }
+        });
+
+        if (updateResult.count === 0) {
+            return res.status(409).json({
+                message: "Job was already updated by another request"
+            });
+        }
+
+        const closedJob = await prisma.job.findUnique({
+            where: {
+                id: id
             }
         });
 
@@ -301,12 +399,26 @@ export const archiveJob = async (req, res) => {
             });
         }
 
-        const archivedJob = await prisma.job.update({
+        // Atomically archive only a CLOSED job.
+        const updateResult = await prisma.job.updateMany({
             where: {
-                id: id
+                id: id,
+                status: "CLOSED"
             },
             data: {
                 status: "ARCHIVED"
+            }
+        });
+
+        if (updateResult.count === 0) {
+            return res.status(409).json({
+                message: "Job was already updated by another request"
+            });
+        }
+
+        const archivedJob = await prisma.job.findUnique({
+            where: {
+                id: id
             }
         });
 
