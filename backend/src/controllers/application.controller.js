@@ -1,4 +1,5 @@
 import prisma from "../db/prisma.js";
+import { createNotification } from "../services/notification.service.js";
 
 export const createApplication = async (req, res) => {
     try {
@@ -56,6 +57,14 @@ export const createApplication = async (req, res) => {
         });
 
     } catch (error) {
+
+        // Handle duplicate application race condition.
+        if (error.code === "P2002") {
+            return res.status(409).json({
+                message: "You have already applied for this job"
+            });
+        }
+
         console.error("Create application error:", error);
 
         res.status(500).json({
@@ -190,14 +199,46 @@ export const updateApplicationStatus = async (req, res) => {
             });
         }
 
-        const updatedApplication = await prisma.application.update({
+        // Atomically update only if the status is unchanged.
+        const updateResult = await prisma.application.updateMany({
             where: {
-                id: applicationId
+                id: applicationId,
+                status: application.status
             },
             data: {
                 status
             }
         });
+
+        // Another request may have already updated the application.
+        if (updateResult.count === 0) {
+            return res.status(409).json({
+                message: "Application status was already updated by another request"
+            });
+        }
+
+        // Fetch the updated application.
+        const updatedApplication = await prisma.application.findUnique({
+            where: {
+                id: applicationId
+            }
+        });
+
+
+        // Notification failure should not fail the application update.
+        try {
+            await createNotification({
+                userId: application.candidateId,
+                type: "APPLICATION_STATUS",
+                title: "Application Status Updated",
+                message: `Your application for ${application.job.title} has moved from ${application.status} to ${status}.`
+            });
+        } catch (notificationError) {
+            console.error(
+                "Application updated, but notification failed:",
+                notificationError
+            );
+        }
 
         res.status(200).json({
             message: "Application status updated successfully",
