@@ -27,23 +27,33 @@ model User {
   updatedAt DateTime @updatedAt
   jobs Job[]
   applications Application[]
+  notifications Notification[]
   candidateProfile CandidateProfile?
 }
 
 model CandidateProfile {
-  id        String   @id @default(cuid())
+  id                  String   @id @default(cuid())
 
-  phone     String?
-  location  String?
-  bio       String?
-  skills    String?
-  resumeUrl String?
+  phone               String?
+  location            String?
+  bio                 String?
+  skills              String?
 
-  userId    String   @unique
-  user      User     @relation(fields: [userId], references: [id])
+  // Resume storage
+  resumeUrl           String?
+  resumePublicId      String?
+  resumeFormat        String?
+  resumeOriginalName  String?
 
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  // Profile photo storage
+  profilePhotoUrl      String?
+  profilePhotoPublicId String?
+
+  userId              String   @unique
+  user                User     @relation(fields: [userId], references: [id])
+
+  createdAt           DateTime @default(now())
+  updatedAt           DateTime @updatedAt
 }
 
 enum JobStatus {
@@ -103,6 +113,7 @@ model Application {
 
   interviews Interview[]
   offers Offer[]
+  
   @@unique([candidateId, jobId])
   
 }
@@ -156,7 +167,50 @@ model Offer {
   notes         String?
 
   application   Application @relation(fields: [applicationId], references: [id])
+   onboarding    Onboarding?
 
   createdAt     DateTime    @default(now())
   updatedAt     DateTime    @updatedAt
+}
+
+enum OnboardingStatus {
+  INITIATED
+  IN_PROGRESS
+  COMPLETED
+  CANCELLED
+}
+
+model Onboarding {
+  id          String           @id @default(cuid())
+  offerId     String           @unique
+
+  status      OnboardingStatus @default(INITIATED)
+  joiningDate DateTime
+  notes       String?
+
+  offer       Offer            @relation(fields: [offerId], references: [id])
+
+  createdAt   DateTime         @default(now())
+  updatedAt   DateTime         @updatedAt
+}
+enum NotificationType {
+  APPLICATION_STATUS
+  INTERVIEW_SCHEDULED
+  OFFER_RECEIVED
+  OFFER_ACCEPTED
+  OFFER_REJECTED
+  SYSTEM
+}
+
+model Notification {
+  id        String           @id @default(cuid())
+  userId    String
+  type      NotificationType
+  title     String
+  message   String
+  isRead    Boolean          @default(false)
+
+  user      User             @relation(fields: [userId], references: [id])
+
+  createdAt DateTime         @default(now())
 }
