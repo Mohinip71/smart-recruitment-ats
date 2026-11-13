@@ -99,10 +99,13 @@ export const login = async (req, res) => {
             }
         );
 
+        const isProd = process.env.NODE_ENV === "production";
+        const sameSite = process.env.COOKIE_SAMESITE || "lax";
+
         res.cookie("token", token, {
             httpOnly: true,
-            secure: false,
-            sameSite: "lax",
+            secure: isProd,
+            sameSite,
             maxAge: 24 * 60 * 60 * 1000
         });
 
