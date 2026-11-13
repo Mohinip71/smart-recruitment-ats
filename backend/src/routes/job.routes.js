@@ -45,12 +45,7 @@ router.patch(
 
 router.get("/:id", getJobById);
 
-router.post(
-    "/",
-    authenticate,
-    authorize("RECRUITER", "ADMIN"),
-    createJob
-);
+
 
 router.patch(
     "/:id",
