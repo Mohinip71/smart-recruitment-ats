@@ -1,0 +1,216 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Get a free hosted Postgres database in seconds: `npx create-db`
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+enum UserRole {
+  CANDIDATE
+  RECRUITER
+  ADMIN
+}
+
+model User {
+  id        String   @id @default(cuid())
+  name      String
+  email     String   @unique
+  password  String
+  role      UserRole @default(CANDIDATE)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  jobs Job[]
+  applications Application[]
+  notifications Notification[]
+  candidateProfile CandidateProfile?
+}
+
+model CandidateProfile {
+  id                  String   @id @default(cuid())
+
+  phone               String?
+  location            String?
+  bio                 String?
+  skills              String?
+
+  // Resume storage
+  resumeUrl           String?
+  resumePublicId      String?
+  resumeFormat        String?
+  resumeOriginalName  String?
+
+  // Profile photo storage
+  profilePhotoUrl      String?
+  profilePhotoPublicId String?
+
+  userId              String   @unique
+  user                User     @relation(fields: [userId], references: [id])
+
+  createdAt           DateTime @default(now())
+  updatedAt           DateTime @updatedAt
+}
+
+enum JobStatus {
+  DRAFT
+  PUBLISHED
+  CLOSED
+  ARCHIVED
+}
+
+enum EmploymentType {
+  FULL_TIME
+  PART_TIME
+  INTERNSHIP
+  CONTRACT
+}
+
+model Job {
+  id             String         @id @default(cuid())
+  title          String
+  description    String
+  location       String?
+  employmentType EmploymentType
+  salaryMin      Int?
+  salaryMax      Int?
+  skills         String?
+  status         JobStatus      @default(DRAFT)
+
+  recruiterId    String
+  recruiter      User           @relation(fields: [recruiterId], references: [id])
+
+  applications   Application[]
+
+  createdAt      DateTime       @default(now())
+  updatedAt      DateTime       @updatedAt
+}
+
+enum ApplicationStatus {
+  APPLIED
+  SCREENING
+  SHORTLISTED
+  INTERVIEW
+  SELECTED
+  REJECTED
+}
+
+model Application {
+  id          String            @id @default(cuid())
+  candidateId String
+  jobId       String
+  status      ApplicationStatus @default(APPLIED)
+
+  createdAt   DateTime          @default(now())
+  updatedAt   DateTime          @updatedAt
+
+  candidate   User              @relation(fields: [candidateId], references: [id])
+  job         Job               @relation(fields: [jobId], references: [id])
+
+  interviews Interview[]
+  offers Offer[]
+  
+  @@unique([candidateId, jobId])
+  
+}
+
+enum InterviewType {
+  ONLINE
+  IN_PERSON
+}
+
+enum InterviewStatus {
+  SCHEDULED
+  COMPLETED
+  CANCELLED
+}
+
+model Interview {
+  id            String          @id @default(cuid())
+
+  applicationId String
+  scheduledAt   DateTime
+
+  type          InterviewType
+  meetingLink   String?
+  location      String?
+
+  status        InterviewStatus @default(SCHEDULED)
+
+  notes         String?
+
+  application   Application     @relation(fields: [applicationId], references: [id])
+
+  createdAt     DateTime        @default(now())
+  updatedAt     DateTime        @updatedAt
+}
+
+enum OfferStatus {
+  PENDING
+  ACCEPTED
+  REJECTED
+  EXPIRED
+}
+
+model Offer {
+  id            String      @id @default(cuid())
+
+  applicationId String      @unique
+  salary        Int
+  joiningDate   DateTime
+  expiryDate    DateTime?
+  status        OfferStatus @default(PENDING)
+  notes         String?
+
+  application   Application @relation(fields: [applicationId], references: [id])
+   onboarding    Onboarding?
+
+  createdAt     DateTime    @default(now())
+  updatedAt     DateTime    @updatedAt
+}
+
+enum OnboardingStatus {
+  INITIATED
+  IN_PROGRESS
+  COMPLETED
+  CANCELLED
+}
+
+model Onboarding {
+  id          String           @id @default(cuid())
+  offerId     String           @unique
+
+  status      OnboardingStatus @default(INITIATED)
+  joiningDate DateTime
+  notes       String?
+
+  offer       Offer            @relation(fields: [offerId], references: [id])
+
+  createdAt   DateTime         @default(now())
+  updatedAt   DateTime         @updatedAt
+}
+enum NotificationType {
+  APPLICATION_STATUS
+  INTERVIEW_SCHEDULED
+  OFFER_RECEIVED
+  OFFER_ACCEPTED
+  OFFER_REJECTED
+  SYSTEM
+}
+
+model Notification {
+  id        String           @id @default(cuid())
+  userId    String
+  type      NotificationType
+  title     String
+  message   String
+  isRead    Boolean          @default(false)
+
+  user      User             @relation(fields: [userId], references: [id])
+
+  createdAt DateTime         @default(now())
+}

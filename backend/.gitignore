@@ -1,0 +1,13 @@
+.env
+.env.*
+!.env.example
+
+node_modules/
+admin-cookies.txt
+candidate-cookies.txt
+candidate2-cookies.txt
+owner-cookies.txt
+cookies.txt
+recruiter-cookies.txt
+# Generated Prisma Client
+src/generated/
